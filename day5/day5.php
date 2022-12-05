@@ -30,3 +30,21 @@ $rearranged_stacks = \array_reduce(
     "The message of the first rearrangement is \"%s\" (part 1)\n",
     \implode('', \array_map('array_pop', $rearranged_stacks))
 );
+
+$rearranged_stacks2 = \array_reduce(
+    \explode("\n", \trim($procedure)),
+    static function (array $crate_stacks, string $move) {
+        \preg_match('/move (\d+) from (\d+) to (\d+)/', $move, $matches);
+        $crate_stacks[$matches[3] - 1] = \array_merge(
+            $crate_stacks[$matches[3] - 1],
+            \array_splice($crate_stacks[$matches[2] - 1], -$matches[1])
+        );
+        return $crate_stacks;
+    },
+    $crate_stacks
+);
+
+\printf(
+    "The message of the second rearrangement is \"%s\" (part 2)\n",
+    \implode('', \array_map('array_pop', $rearranged_stacks2))
+);
